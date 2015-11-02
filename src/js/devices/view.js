@@ -4,6 +4,7 @@
 import O from 'orchestra';
 import HB from 'handlebars';
 import itemTemplate from './item-template.hbs';
+import commandTemplate from './command-template.hbs';
 import { commands } from '../config';
 
 let $ = O.$;
@@ -16,10 +17,9 @@ var DeviceView = O.ItemView.extend({
 
     if (typeof commands[deviceType] === 'function') {
       let deviceCommands = commands[deviceType]();
-      let template = HB.compile('<a href="#" class="js-send-command" data-command={{commandType}}>{{commandName}}</a>');
 
       return {
-        commands: _.map(deviceCommands, (command) => template(command)).join(' '),
+        commands: _.map(deviceCommands, (command) => commandTemplate(command)).join(' '),
       };
     }
   },
