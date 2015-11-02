@@ -1,8 +1,6 @@
-/* global export */
 'use strict';
 
 import O from 'orchestra';
-import HB from 'handlebars';
 import itemTemplate from './item-template.hbs';
 import commandTemplate from './command-template.hbs';
 import { commands } from '../config';
@@ -35,7 +33,7 @@ var DeviceView = O.ItemView.extend({
 
     this.model.sendCommand({}, command);
   },
-});   
+});
 
 export default O.CollectionView.extend({
   tagName: 'ul',
