@@ -1,4 +1,6 @@
 var gulp = require('gulp');
+var sass = require('gulp-ruby-sass');
+var sourcemaps = require('gulp-sourcemaps');
 var browserify = require('browserify');
 var babelify = require('babelify');
 var source = require('vinyl-source-stream');
@@ -13,7 +15,7 @@ gulp.task('serve', ['build-html', 'build-css', 'build-js'], function () {
     electron.restart('--disable-http-cache');
   });
 
-  gulp.watch('src/css/*.css', ['rebuild-css']);
+  gulp.watch('src/css/*.scss', ['rebuild-css']);
   gulp.watch('src/js/app.js', ['rebuild-js']);
   gulp.watch('src/index.html', ['rebuild-html']);
 });
@@ -21,10 +23,10 @@ gulp.task('serve', ['build-html', 'build-css', 'build-js'], function () {
 gulp.task('rebuild-html', ['build-html'], function(){
   electron.reload();
 });
-gulp.task('rebuild-css', ['build-css'], function(){
+gulp.task('rebuild-css', ['build-css'], function() {
   electron.reload();
 });
-gulp.task('rebuild-js', ['build-js'], function(){
+gulp.task('rebuild-js', ['build-js'], function() {
   electron.reload();
 });
 
@@ -45,9 +47,13 @@ gulp.task('build-html', function() {
 });
 
 gulp.task('build-css', function() {
-  return gulp.src('src/css/*.css')
-    // Perform minification tasks, etc here
-    .pipe(gulp.dest('dist/stylesheets/'));
+  return sass('./src/sass/main.scss', {
+    loadPath: [
+      './node_modules/bootstrap-sass/assets/stylesheets/',
+      './node_modules/font-awesome/scss/',
+    ]
+  })
+  .pipe(gulp.dest('./dist/stylesheets/'));
 });
 
 electron.on("appClosed", function(){
